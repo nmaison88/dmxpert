@@ -104,13 +104,15 @@ class DMXConnection(object):
     def fadeUp(self, channel, startValue, stopValue, duration):
         begin = 0
         value = startValue
-        increment = ((stopValue - startValue) / duration) * 0.10
+        increment = ((stopValue - startValue) / duration) 
         while begin < duration:
-            self.setChannel(channel, value, True)
-            begin += 1
-            value += increment/.1
-            print(begin, increment, value, duration)
-            time.sleep(.10)
+          if(value >255):
+            value = 0
+          self.setChannel(channel, value, True)
+          begin += 1
+          value += increment
+          print(begin, increment, value, duration)
+          time.sleep(1)
 
     def setToOrange(self):
         # make orange
