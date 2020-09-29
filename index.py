@@ -13,4 +13,7 @@ BLUE=3
 # mydmx.setChannel(4, 255, autorender=True) # set channel 4 to full and render to the network
 while True:
 	mydmx.setToFire()
-	time.sleep(20)
+	# mydmx.setToYellow()
+	# mydmx.fadeUp(BLUE,0,255,5)
+	# time.sleep(20)
+
