@@ -14,6 +14,6 @@ BLUE=3
 while True:
 	# mydmx.setToFire()
 	# mydmx.setToYellow()
-	mydmx.fadeUp(BLUE,0,255,5)
+	mydmx.fadeUp(GREEN,0,255,2)
 	# time.sleep(20)
 
