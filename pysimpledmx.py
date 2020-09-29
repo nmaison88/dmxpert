@@ -101,19 +101,42 @@ class DMXConnection(object):
     def close(self):
         self.com.close()
 
-    def fadeUp(self, channel, startValue, stopValue, duration):
+    def fadeUp(self, channel, startValue, stopValue, duration,intervals=1):
         begin = 0
         value = startValue
         duration = duration * 10
+        intervalsCompleted = 0
         increment = ((stopValue - startValue) / duration) 
-        while begin < duration:
+        while begin < duration and intervalsCompleted <= intervals:
+          
+          print("fadeUp channel: " +str(channel))
           if(value >255):
-            value = 0
+            value = startValue
+            intervalsCompleted +=1
           self.setChannel(channel, value, True)
           begin += 1
           value += increment
-          print(begin, increment, value, duration)
+          print(begin, increment, value, duration, intervalsCompleted)
           time.sleep(.1)
+        return
+      
+    def fadeDown(self, channel, startValue, stopValue, duration, intervals=1):
+        begin = 0
+        value = startValue
+        duration = duration * 10
+        intervalsCompleted = 0
+        increment = ((stopValue - startValue) / duration) 
+        while begin < duration and intervalsCompleted <= intervals:
+          print("fadeDown channel: " +str(channel))
+          if(value <= stopValue):
+            value = startValue
+            intervalsCompleted +=1
+          self.setChannel(channel, value, True)
+          begin += 1
+          value += increment
+          print(begin, increment, value, duration, intervalsCompleted)
+          time.sleep(.1)
+        return
 
     def setToOrange(self):
         # make orange
@@ -123,7 +146,9 @@ class DMXConnection(object):
         self.render()
 
     def setToYellow(self):
+      # make yello
         self.setChannel(RED, 150)  # set DMX channel 2 to 128
+        self.setChannel(BLUE, 0)
         self.setChannel(GREEN, 100, True)  # set DMX channel 2 to 128
 
     def setToRed(self):
@@ -132,9 +157,21 @@ class DMXConnection(object):
         self.setChannel(GREEN, 0)
         self.render()
 
-    def setToFire(self):
-        while True:
-            self.setToOrange()
-            time.sleep(2)
-            self.setToRed()
-            time.sleep(2)
+    def setToFire(self, timer = False):
+        while timer:
+          print("in while Loop")
+          self.setToOrange()
+          time.sleep(2)
+          self.fadeDown(GREEN,69,0,2, 1)
+          time.sleep(2)
+          self.fadeUp(GREEN,0,69,2, 1)
+          time.sleep(2)
+          
+        print("outside while Loop")
+        self.setToOrange()
+        time.sleep(2)
+        self.fadeDown(GREEN,69,0,2) # make solid red by removing the green
+        time.sleep(2)
+        self.fadeUp(GREEN,0,69,2)  # make Yellow/orange by adding the green
+        time.sleep(2)
+        return
